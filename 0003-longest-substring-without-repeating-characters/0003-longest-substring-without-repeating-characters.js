@@ -4,20 +4,25 @@
  */
 var lengthOfLongestSubstring = function(str) {
 
+let max = 0;
+    let windowStart = 0;
+    const soFar = {};
     
-      let longest = 0;
-  let seen = {};
-  let start = 0;
-
-  for (let i = 0; i < str.length; i++) {
-    let char = str[i];
-    if (seen[char]) {
-      start = Math.max(start, seen[char]);
+    for(let windowEnd = 0; windowEnd < str.length; windowEnd++){
+        let rightChar = str[windowEnd];
+        soFar[rightChar] = soFar[rightChar] + 1 || 1;
+        
+        while (soFar[rightChar]>1){
+            let leftChar = str[windowStart];
+            
+            if(soFar[leftChar]>1){
+                soFar[leftChar]--;
+            } else {
+                delete soFar[leftChar];
+            }
+            windowStart++
+        }
+        max = Math.max(max, (windowEnd - windowStart)+1)
     }
-    // index - beginning of substring + 1 (to include current in count)
-    longest = Math.max(longest, i - start + 1);
-    // store the index of the next char so as to not double count
-    seen[char] = i + 1;
-  }
-  return longest;
+    return max
 };
